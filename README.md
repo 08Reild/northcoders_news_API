@@ -1,3 +1,3 @@
-# Northcoders News API
+Instructions:
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+The original .env* files have been removed from the uploaded repo and you will therefore need to crearte/add these files back to the repo. The files are called .eve.test and .env.development. These files must include: PGDATABASE=<name_of_your_database>
