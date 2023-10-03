@@ -1,11 +1,17 @@
 const db = require('../db/connection')
 // const format = require('pg-format')
 
-function fetchTopics() {
-    return db.query(`SELECT * FROM topics`)
-    .then((result) => {  
-        return result.rows 
-    })
+function fetchTopics(requestPath) {
+    if (requestPath === "topics") {
+        return db.query(`SELECT * FROM topics`).then((result) => {
+            return result.rows
+        })
+    } else {
+        return Promise.reject({
+            status: 404,
+            message: 'Not Found'
+            })
+    }
 }
 
-module.exports = {fetchTopics}
+module.exports = { fetchTopics }

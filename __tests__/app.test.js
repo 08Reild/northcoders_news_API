@@ -12,7 +12,7 @@ beforeEach( () => {
 
 afterAll(() => {db.end()})
 
-describe.only("/api/topics", () => {
+describe("/api/topics", () => {
     test("Checks the request returns status 200 and an array of all topics with slug and description properties", () => {
         return request(app)
         .get('/api/topics')
@@ -25,4 +25,15 @@ describe.only("/api/topics", () => {
             expect(body.topics[0]).toHaveProperty('description');
             })
         })
+})
+
+describe.only("Invalid paths", () => {
+    test("Returns 404 Not Found when an invalid path is given", () => {
+        return request(app)
+        .get("/api/not_valid")
+        .expect(404)
+        .then( ( {body} ) => {
+            expect(body.msg).toBe("Not Found")
+        })
+    })
 })
