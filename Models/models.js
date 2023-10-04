@@ -1,4 +1,6 @@
 const db = require('../db/connection')
+const fs = require('fs/promises');
+
 // const format = require('pg-format')
 
 function fetchTopics(requestPath) {
