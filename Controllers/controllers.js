@@ -14,6 +14,7 @@ function getTopics (req, res, next) {
 
 function getEndpoints (req, res, next) {
     res.status(200).send({endpoints: endpoints})
+    
 }
 
 
