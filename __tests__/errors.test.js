@@ -17,8 +17,24 @@ describe("Invalid paths", () => {
         return request(app)
         .get("/api/not_valid")
         .expect(404)
-        .then( ( {body} ) => {
+        .then(({body}) => {
             expect(body.msg).toBe("Not Found")
+        })
+    })
+    test("Requesting articles with an article_id that does not exist returns 404 Not Found", () => {
+        return request(app)
+        .get('/api/articles/819461')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("Not Found")
+        })
+    })
+    test("Requesting articles with a non numeric value instead of a article_id number returns 400 bad request", () => {
+        return request(app)
+        .get('/api/articles/invalidrequest')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Bad Request")
         })
     })
 })
