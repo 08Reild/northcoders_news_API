@@ -18,4 +18,5 @@ app.get("/api/:endpoint", getTopics)
 
 app.use(handleCustomErrors)
 
+
 module.exports = { app }
