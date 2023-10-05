@@ -37,7 +37,7 @@ function fetchAllArticles() {
         articles.created_at,
         articles.votes,
         articles.article_img_url,
-        COUNT(comments.comment_id) 
+        COUNT(comments.comment_id) :: INT
         AS comment_count
         FROM articles
         LEFT JOIN comments 
