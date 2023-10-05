@@ -82,7 +82,7 @@ describe('/api/articles', () => {
 });
 
 describe('/api/articles', () => {
-    test('GET /api/articles should return all articles', () => {
+    test('GET /api/articles returns the comment_count as a number', () => {
         return request(app)
             .get('/api/articles')
             .expect(200)
