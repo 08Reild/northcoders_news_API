@@ -12,11 +12,11 @@ function fetchTopics(requestPath) {
         return Promise.reject({
             status: 404,
             message: 'Not Found'
-            })
+        })
     }
 }
 
-function fetchArticlesById (article_id) {
+function fetchArticlesById(article_id) {
     return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
         .then((result) => {
             if (result.rows.length === 0) {
@@ -24,7 +24,7 @@ function fetchArticlesById (article_id) {
                     status: 404,
                     message: 'Not Found'
                 })
-            } 
+            }
             return result.rows[0];
         })
 }
