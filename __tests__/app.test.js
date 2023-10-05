@@ -6,7 +6,6 @@ const request = require("supertest")
 // require("jest-sorted")
 const db = require("../db/connection")
 const endpoints = require('../endpoints.json');
-const articles = require("../db/data/test-data/articles")
 
 beforeEach(() => {
     return seed(data)
@@ -42,31 +41,44 @@ describe('/api', () => {
 
 describe('/api/articles/:article_id', () => {
     test('GET /api/articles/:article_id should return an article by its id', () => {
-        const article_id = 1; 
+        const article_id = 1;
         return request(app)
             .get(`/api/articles/${article_id}`)
             .expect(200)
             .then(({ body }) => {
-                const article = body.article;
-                expect(article).toHaveProperty('author')
-                expect(article).toHaveProperty('title')
-                expect(article).toHaveProperty('article_id')
-                expect(article).toHaveProperty('body')
-                expect(article).toHaveProperty('topic')
-                expect(article).toHaveProperty('created_at')
-                expect(article).toHaveProperty('votes')
-                expect(article).toHaveProperty('article_img_url')
-            });
+                expect(body.article).toMatchObject({
+                    article_id: 1,
+                    title: expect.any(String),
+                    author: expect.any(String),
+                    topic: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String),
+                    body: expect.any(String)
+                })
+            })
+            ;
     });
 });
 
-describe.skip('/api/articles', () => {
+describe.only('/api/articles', () => {
     test('GET /api/articles should return all articles', () => {
         return request(app)
-            .get('/api')
+            .get('/api/articles')
             .expect(200)
             .then(({ body }) => {
-                expect(body.articles).toEqual("articles");
+                body.articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        article_id: expect.any(Number),
+                        title: expect.any(String),
+                        author: expect.any(String),
+                        topic: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        article_img_url: expect.any(String),
+                        comment_count: expect.any(String)
+                    });
+                });
             });
     });
 });

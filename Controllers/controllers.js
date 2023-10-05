@@ -32,7 +32,8 @@ function getArticlesById (req, res, next) {
 }
 
 function getAllArticles (req, res, next) {
-    return fetchAllArticles().then((articles) => {
+    return fetchAllArticles()
+    .then((articles) => {
         res.status(200).send({articles: articles})
     })
     .catch((err) => {
