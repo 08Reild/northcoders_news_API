@@ -59,3 +59,14 @@ describe('/api/articles/:article_id', () => {
             });
     });
 });
+
+describe.skip('/api/articles', () => {
+    test('GET /api/articles should return all articles', () => {
+        return request(app)
+            .get('/api')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.articles).toEqual("articles");
+            });
+    });
+});

@@ -28,4 +28,19 @@ function fetchArticlesById (article_id) {
             return result.rows[0];
         })
 }
-module.exports = { fetchTopics, fetchArticlesById }
+
+function fetchAllArticles () {
+        return db.query(`SELECT * FROM articles`)
+        .then((result) => {
+            return result
+        })
+    }
+    
+    // else {
+    //     return Promise.reject({
+    //         status: 404,
+    //         message: 'Not Found'
+    //         })
+    // }
+
+module.exports = { fetchTopics, fetchArticlesById, fetchAllArticles}
