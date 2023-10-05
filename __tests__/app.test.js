@@ -22,8 +22,6 @@ describe("/api/topics", () => {
                 const firstObjInTopics = { slug: 'mitch', description: 'The man, the Mitch, the legend' }
                 expect(body.topics.length).toBe(3)
                 expect(body.topics[0]).toMatchObject(firstObjInTopics)
-                expect(body.topics[0]).toHaveProperty('slug');
-                expect(body.topics[0]).toHaveProperty('description');
             })
     })
 })

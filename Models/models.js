@@ -13,7 +13,7 @@ function fetchTopics(requestPath) {
         return Promise.reject({
             status: 404,
             message: 'Not Found'
-            })
+        })
     }
 }
 
@@ -29,7 +29,7 @@ function fetchArticlesById (article_id) {
                     status: 404,
                     message: 'Not Found'
                 })
-            } 
+            }
             return result.rows[0];
         })
 }

@@ -19,9 +19,6 @@ function getEndpoints (req, res, next) {
 
 function getArticlesById (req, res, next) {
     const article_id = req.params.article_id;
-    if (isNaN(article_id)) {
-        return res.status(400).send({msg: "Bad Request"})
-    } 
     return fetchArticlesById(article_id)
     .then((article) => {
         res.status(200).send({ article: article });
