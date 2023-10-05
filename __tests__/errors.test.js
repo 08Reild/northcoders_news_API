@@ -37,4 +37,12 @@ describe("Invalid paths", () => {
             expect(body.msg).toBe("Bad Request")
         })
     })
+    // test("Requesting an invalid endpoint returns 404 not Found", () => {
+    //     return request(app)
+    //     .get('/api/articl3s')
+    //     .expect(404)
+    //     .then(({body}) => {
+    //         expect(body.msg).toBe("Not Found")
+    //     })
+    // })
 })
