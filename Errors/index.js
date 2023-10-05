@@ -1,6 +1,5 @@
 function handleCustomErrors(err, req, res, next) {
     if (err.status === 404) {
-        console.log("Hi, I'm here!")
         res.status(404).send({ msg: "Not Found" });
     } else {
     next(err)

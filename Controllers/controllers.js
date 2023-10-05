@@ -1,9 +1,8 @@
-const {fetchTopics, fetchArticlesById, fetchAllArticles } = require("../Models/models")
+const {fetchTopics, fetchArticlesById, fetchAllArticles, fetchArticlesComments } = require("../Models/models")
 const endpoints = require('../endpoints.json');
 
 function getTopics (req, res, next) {
-    const requestPath = req.params.endpoint
-    return fetchTopics(requestPath)
+    return fetchTopics()
     .then((result) => {
         res.status(200).send({topics: result})
     })
@@ -14,7 +13,6 @@ function getTopics (req, res, next) {
 
 function getEndpoints (req, res, next) {
     res.status(200).send({endpoints: endpoints})
-
 }
 
 function getArticlesById (req, res, next) {
@@ -38,4 +36,16 @@ function getAllArticles (req, res, next) {
     })
 }
 
-module.exports = {getTopics, getEndpoints, getArticlesById, getAllArticles }
+function getArticlesComments (req, res, next) {
+    const article_id = req.params.article_id
+    return fetchArticlesComments(article_id)
+    .then((comments) => {
+        res.status(200).send({comments: comments})
+    })
+    .catch((err) => {
+        //console.log(err, "I'm the error in the getArticlesComment function in the controller")
+        next(err)
+    })
+}
+
+module.exports = {getTopics, getEndpoints, getArticlesById, getAllArticles, getArticlesComments }

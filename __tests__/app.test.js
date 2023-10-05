@@ -80,3 +80,22 @@ describe('/api/articles', () => {
             });
     });
 });
+
+describe('/api/articles/:article_id/comments', () => {
+    test('Checks the request returns all comments for a given article_id', () => {
+        const article_id = 1
+        return request(app)
+            .get(`/api/articles/${article_id}/comments`)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comments[0]).toMatchObject({
+                    article_id: expect.any(Number),
+                    comment_id: expect.any(Number),
+                    author: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                });
+            });
+    });
+});
