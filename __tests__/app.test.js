@@ -59,7 +59,7 @@ describe('/api/articles/:article_id', () => {
     });
 });
 
-describe.only('/api/articles', () => {
+describe('/api/articles', () => {
     test('GET /api/articles should return all articles', () => {
         return request(app)
             .get('/api/articles')
