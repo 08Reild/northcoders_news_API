@@ -15,7 +15,6 @@ function handlePSQLErrors(err, req, res, next) {
     }
 }
 
-
 function handle500Errors(err, req, res, next) {
     //console.log(err, "<<<<I'm in the handle500Errors")
     res.status(500).send({ msg: "Internal Server Error" })
