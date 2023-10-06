@@ -123,3 +123,43 @@ describe('/api/articles/:article_id/comments', () => {
             })
     })
 })
+
+describe('/api/articles/:article_id/comments', () => {
+    test('Checks the request returns all comments for a given article_id', () => {
+        const article_id = 1
+        return request(app)
+            .get(`/api/articles/${article_id}/comments`)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comments[0]).toMatchObject({
+                    article_id: expect.any(Number),
+                    comment_id: expect.any(Number),
+                    author: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                });
+            });
+    });
+});
+
+describe('/api/articles/:article_id/comments', () => {
+    test('Checks the comments database is updated with the new comment when user posts a comment', () => {
+        const newComment1 = {
+            body: "This is great. Thanks for posting!",
+            username: "butter_bridge",
+        }
+        const article_id = 1
+        return request(app)
+            .post(`/api/articles/${article_id}/comments`)
+            .send(newComment1)
+            .expect(201)
+            .then(({ body }) => {
+                console.log(body)
+                expect(body.msg).toHaveProperty('comment_id')
+                expect(body.msg.article_id).toBe(article_id)
+                expect(body.msg.body).toBe(newComment1.body)
+                expect(body.msg.author).toBe(newComment1.username)
+            });
+    });
+});

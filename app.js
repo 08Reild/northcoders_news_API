@@ -1,7 +1,22 @@
 const express = require('express')
-const { getTopics, getEndpoints, getArticlesById, getAllArticles, getArticlesComments } = require('./Controllers/controllers')
-const { handleCustomErrors, handlePSQLErrors, handle500Errors} = require('./Errors/index.js')
+const bodyParser = require('body-parser')
+const { 
+    getTopics, 
+    getEndpoints, 
+    getArticlesById, 
+    getAllArticles, 
+    getArticlesComments,
+    postComment
+} = require('./Controllers/controllers')
+const { 
+    handleCustomErrors, 
+    handlePSQLErrors, 
+    handle500Errors 
+} = require('./Errors/index.js')
 const app = express()
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/api', getEndpoints);
 
@@ -13,8 +28,10 @@ app.get("/api/articles/:article_id", getArticlesById);
 
 app.get("/api/articles/:article_id/comments", getArticlesComments)
 
+app.post("/api/articles/:article_id/comments", postComment)
+
 app.all('/api/*', (req, res) => {
-  return res.status(404).send({ msg: "Not Found"})
+    return res.status(404).send({ msg: "Not Found" })
 })
 
 app.use(handleCustomErrors);

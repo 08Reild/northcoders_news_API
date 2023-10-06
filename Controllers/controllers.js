@@ -1,4 +1,10 @@
-const { fetchTopics, fetchArticlesById, fetchAllArticles, fetchArticlesComments } = require("../Models/models")
+const { 
+    fetchTopics, 
+    fetchArticlesById, 
+    fetchAllArticles, 
+    fetchArticlesComments,
+    insertComment
+} = require("../Models/models")
 const endpoints = require('../endpoints.json');
 
 function getTopics(req, res, next) {
@@ -49,4 +55,27 @@ function getArticlesComments(req, res, next) {
         })
 }
 
-module.exports = { getTopics, getEndpoints, getArticlesById, getAllArticles, getArticlesComments }
+function postComment (req, res, next) {
+    const username = req.body.username
+    const body = req.body.body
+    const article_id = req.params.article_id
+    if (!username || !body) {
+        return res.status(400).send({ msg: "Bad Request" });
+    }
+    return insertComment(article_id, username, body)
+    .then((result) => {
+        res.status(201).send({msg: result})
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+module.exports = { 
+    getTopics, 
+    getEndpoints, 
+    getArticlesById, 
+    getAllArticles, 
+    getArticlesComments, 
+    postComment
+}
