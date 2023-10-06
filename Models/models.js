@@ -3,21 +3,14 @@ const fs = require('fs/promises');
 
 // const format = require('pg-format')
 
-function fetchTopics(requestPath) {
-    if (requestPath === "topics") {
+function fetchTopics() {
         return db.query(`SELECT * FROM topics`)
-        .then((result) => {
-            return result.rows
+            .then((result) => {
+                return result.rows
         })
-    } else {
-        return Promise.reject({
-            status: 404,
-            message: 'Not Found'
-        })
-    }
-}
+    } 
 
-function fetchArticlesById (article_id) {
+function fetchArticlesById(article_id) {
     return db.query(`
         SELECT * 
         FROM articles 
@@ -34,8 +27,8 @@ function fetchArticlesById (article_id) {
         })
 }
 
-function fetchAllArticles () {
-        return db.query(`
+function fetchAllArticles() {
+    return db.query(`
         SELECT 
         articles.article_id,
         articles.title,
@@ -44,7 +37,7 @@ function fetchAllArticles () {
         articles.created_at,
         articles.votes,
         articles.article_img_url,
-        COUNT(comments.comment_id) 
+        COUNT(comments.comment_id) :: INT
         AS comment_count
         FROM articles
         LEFT JOIN comments 
@@ -55,14 +48,27 @@ function fetchAllArticles () {
         .then((result) => {
             return result.rows
         })
-    }
-    
-    // else {
-    //     return Promise.reject({
-    //         status: 404,
-    //         message: 'Not Found'
-    //         })
-    // }
+}
 
-module.exports = { fetchTopics, fetchArticlesById, fetchAllArticles}
+function fetchArticlesComments(article_id) {
+    return db.query(`
+        SELECT 
+        comments.comment_id,
+        comments.votes,
+        comments.created_at,
+        comments.author,
+        comments.body,
+        comments.article_id,
+        COUNT(*) 
+        AS comment_count
+        FROM comments
+        WHERE comments.article_id = $1
+        GROUP BY comments.comment_id, comments.votes, comments.created_at, comments.author, comments.body, comments.article_id
+        ORDER BY comments.created_at DESC;`
+        , [article_id])
+        .then((result) => {
+            return result.rows;
+        })
+}
 
+module.exports = { fetchTopics, fetchArticlesById, fetchAllArticles, fetchArticlesComments }

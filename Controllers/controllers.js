@@ -1,41 +1,52 @@
-const {fetchTopics, fetchArticlesById, fetchAllArticles } = require("../Models/models")
+const { fetchTopics, fetchArticlesById, fetchAllArticles, fetchArticlesComments } = require("../Models/models")
 const endpoints = require('../endpoints.json');
 
-function getTopics (req, res, next) {
-    const requestPath = req.params.endpoint
-    return fetchTopics(requestPath)
-    .then((result) => {
-        res.status(200).send({topics: result})
-    })
-    .catch((err) => {
-        next(err)
-    })
+function getTopics(req, res, next) {
+    return fetchTopics()
+        .then((result) => {
+            res.status(200).send({ topics: result })
+        })
+        .catch((err) => {
+            next(err)
+        })
 }
 
-function getEndpoints (req, res, next) {
-    res.status(200).send({endpoints: endpoints})
-
+function getEndpoints(req, res, next) {
+    res.status(200).send({ endpoints: endpoints })
 }
 
-function getArticlesById (req, res, next) {
+function getArticlesById(req, res, next) {
     const article_id = req.params.article_id;
     return fetchArticlesById(article_id)
-    .then((article) => {
-        res.status(200).send({ article: article });
-    })
-    .catch((err) => {
-        next(err);
-    });
+        .then((article) => {
+            res.status(200).send({ article: article });
+        })
+        .catch((err) => {
+            next(err);
+        });
 }
 
-function getAllArticles (req, res, next) {
+function getAllArticles(req, res, next) {
     return fetchAllArticles()
-    .then((articles) => {
-        res.status(200).send({articles: articles})
-    })
-    .catch((err) => {
-        next(err)
-    })
+        .then((articles) => {
+            res.status(200).send({ articles: articles })
+        })
+        .catch((err) => {
+            next(err)
+        })
 }
 
-module.exports = {getTopics, getEndpoints, getArticlesById, getAllArticles }
+function getArticlesComments(req, res, next) {
+    const article_id = req.params.article_id
+    fetchArticlesById(article_id).then((result) => {
+        return fetchArticlesComments(article_id)
+            .then((comments) => {
+                res.status(200).send({ comments: comments })
+            })
+    })
+        .catch((err) => {
+            next(err)
+        })
+}
+
+module.exports = { getTopics, getEndpoints, getArticlesById, getAllArticles, getArticlesComments }

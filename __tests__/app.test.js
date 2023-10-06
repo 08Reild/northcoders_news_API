@@ -74,9 +74,52 @@ describe('/api/articles', () => {
                         created_at: expect.any(String),
                         votes: expect.any(Number),
                         article_img_url: expect.any(String),
-                        comment_count: expect.any(String)
+                        comment_count: expect.any(Number)
                     });
                 });
             });
     });
 });
+
+describe('/api/articles', () => {
+    test('GET /api/articles returns the comment_count as a number', () => {
+        return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({ body }) => {
+                body.articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        comment_count: expect.any(Number)
+                    });
+                });
+            });
+    });
+});
+
+describe('/api/articles/:article_id/comments', () => {
+    test('Checks the request returns all comments for a given article_id', () => {
+        const article_id = 1
+        return request(app)
+            .get(`/api/articles/${article_id}/comments`)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comments[0]).toMatchObject({
+                    article_id: expect.any(Number),
+                    comment_id: expect.any(Number),
+                    author: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                });
+            });
+    });  
+    test('Checks request to an article_id with no comments should return an empty array', () => {
+        const article_id = 2
+        return request(app)
+            .get(`/api/articles/${article_id}/comments`)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comments).toEqual([]);
+            })
+    })
+})
