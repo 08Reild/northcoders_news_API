@@ -112,8 +112,17 @@ describe('/api/articles/:article_id/comments', () => {
                     comment_count: expect.any(String)
                 });
             });
-    });
-});
+    });  
+    test('Checks request to an article_id with no comments should return an empty array', () => {
+        const article_id = 2
+        return request(app)
+            .get(`/api/articles/${article_id}/comments`)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comments).toEqual([]);
+            })
+    })
+})
 
 describe('/api/articles/:article_id/comments', () => {
     test('Checks the request returns all comments for a given article_id', () => {

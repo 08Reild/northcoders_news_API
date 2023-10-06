@@ -44,10 +44,12 @@ function getAllArticles(req, res, next) {
 
 function getArticlesComments(req, res, next) {
     const article_id = req.params.article_id
-    return fetchArticlesComments(article_id)
-        .then((comments) => {
-            res.status(200).send({ comments: comments })
-        })
+    fetchArticlesById(article_id).then((result) => {
+        return fetchArticlesComments(article_id)
+            .then((comments) => {
+                res.status(200).send({ comments: comments })
+            })
+    })
         .catch((err) => {
             next(err)
         })

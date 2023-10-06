@@ -4,11 +4,11 @@ const fs = require('fs/promises');
 // const format = require('pg-format')
 
 function fetchTopics() {
-    return db.query(`SELECT * FROM topics`)
-        .then((result) => {
-            return result.rows
+        return db.query(`SELECT * FROM topics`)
+            .then((result) => {
+                return result.rows
         })
-}
+    } 
 
 function fetchArticlesById(article_id) {
     return db.query(`
@@ -67,13 +67,7 @@ function fetchArticlesComments(article_id) {
         ORDER BY comments.created_at DESC;`
         , [article_id])
         .then((result) => {
-            if (result.rows.length === 0) {
-                return Promise.reject({
-                    status: 404,
-                    message: 'Not Found'
-                })
-            }
-            return result.rows
+            return result.rows;
         })
 }
 
@@ -89,4 +83,3 @@ function insertComment(article_id, username, body) {
 }
 
 module.exports = { fetchTopics, fetchArticlesById, fetchAllArticles, fetchArticlesComments, insertComment }
-

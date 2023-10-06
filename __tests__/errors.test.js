@@ -37,7 +37,7 @@ describe("Invalid get requests", () => {
                 expect(body.msg).toBe("Bad Request")
             })
     })
-    test("Returns 404 Not Found if the requestes articles_id does not exist", () => {
+    test("Returns 404 Not Found if the requested articles_id does not exist", () => {
         return request(app)
             .get('/api/articles/973742/comments')
             .expect(404)
@@ -45,6 +45,15 @@ describe("Invalid get requests", () => {
                 expect(body.msg).toBe("Not Found")
             })
     })
+    test("Requesting article comments with a non numeric value instead of a article_id number returns 400 bad request", () => {
+        return request(app)
+            .get('/api/articles/invalidrequest/comments')
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe("Bad Request")
+            })
+    })
+
 })
 
 describe("invalid posts", () => {
@@ -60,6 +69,7 @@ describe("invalid posts", () => {
                 expect(body.msg).toBe("Bad Request")
             })
     })
+
     test("posting a comment without username returns 400 bad request", () => {
         const commentWithoutUsername = {
             "body": "This is a test comment"
@@ -73,3 +83,4 @@ describe("invalid posts", () => {
             })
     })
 })
+
