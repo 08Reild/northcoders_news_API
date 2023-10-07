@@ -107,7 +107,18 @@ describe("invalid updates (POST/PATCH)", () => {
                 expect(body.msg).toBe('Bad Request')
             })
     })
-    test.skip('Posting a request with a non-existent article_id should return 404 Not Found', () => {
+    test('Posting with a missing inc_votes property should return 400 Bad Request', () => {
+        const article_id = 1
+        const invalidVotes = { invalid_property: 7 }
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(invalidVotes)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe('Bad Request')
+            })
+    })
+    test('Posting a request with a non-existent article_id should return 404 Not Found', () => {
         return request(app)
             .patch(`/api/articles/849274`)
             .send({ inc_votes: 1 })

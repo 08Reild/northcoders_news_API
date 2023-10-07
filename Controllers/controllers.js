@@ -72,22 +72,21 @@ function postComment(req, res, next) {
             }
         })
         .catch((err) => {
-            if (err.status === 404) {
-                return res.status(404).send({ msg: "Not Found" });
-            } else {
                 next(err);
-            }
         });
 }
 
 function updateArticleVotes(req, res, next) {
     const article_id = req.params.article_id
     const inc_votes = req.body.inc_votes
+    fetchArticlesById(article_id).then((result) => {
     return changeArticleVotes(article_id, inc_votes)
     .then((result) => {
         res.status(200).send({msg: result})
     })
+    })
     .catch((err) => {
+        console.log(err)
         next(err)
     })
 }
