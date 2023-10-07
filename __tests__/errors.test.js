@@ -12,7 +12,7 @@ beforeEach(() => {
 
 afterAll(() => { db.end() })
 
-describe("Invalid get requests", () => {
+describe("Invalid GET requests", () => {
     test("Returns 404 Not Found when an invalid path is given", () => {
         return request(app)
             .get("/api/not_valid")
@@ -56,7 +56,7 @@ describe("Invalid get requests", () => {
 
 })
 
-describe("invalid posts", () => {
+describe("invalid updates (POST/PATCH)", () => {
     test("posting a comment without a body returns 400 bad request", () => {
         const commentWithoutBody = {
             "username": "testuser"
@@ -82,5 +82,51 @@ describe("invalid posts", () => {
                 expect(body.msg).toBe("Bad Request")
             })
     })
+    test("posting a comment to a non-existent article_id returns 404 Not Found", () => {
+        const nonExistentArticleId = 938374
+        const newComment = {
+            username: 'testuser',
+            body: 'This is a test comment'
+        };
+        return request(app)
+            .post(`/api/articles/${nonExistentArticleId}/comments`)
+            .send(newComment)
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe('Not Found');
+            });
+    });
+    test('Posting an invalid inc_votes value should return 400 Bad Request', () => {
+        const article_id = 1
+        const invalidVotes = { inc_votes: 'invalid' }
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(invalidVotes)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe('Bad Request')
+            })
+    })
+    test('Posting with a missing inc_votes property should return 400 Bad Request', () => {
+        const article_id = 1
+        const invalidVotes = { invalid_property: 7 }
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(invalidVotes)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe('Bad Request')
+            })
+    })
+    test('Posting a request with a non-existent article_id should return 404 Not Found', () => {
+        return request(app)
+            .patch(`/api/articles/849274`)
+            .send({ inc_votes: 1 })
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe('Not Found')
+            })
+    })
 })
+
 

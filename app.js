@@ -6,7 +6,8 @@ const {
     getArticlesById, 
     getAllArticles, 
     getArticlesComments,
-    postComment
+    postComment,
+    updateArticleVotes
 } = require('./Controllers/controllers')
 const { 
     handleCustomErrors, 
@@ -29,6 +30,8 @@ app.get("/api/articles/:article_id", getArticlesById);
 app.get("/api/articles/:article_id/comments", getArticlesComments)
 
 app.post("/api/articles/:article_id/comments", postComment)
+
+app.patch("/api/articles/:article_id", updateArticleVotes)
 
 app.all('/api/*', (req, res) => {
     return res.status(404).send({ msg: "Not Found" })

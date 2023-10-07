@@ -13,7 +13,7 @@ beforeEach(() => {
 
 afterAll(() => { db.end() })
 
-describe("/api/topics", () => {
+describe("GET /api/topics", () => {
     test("Checks the request returns status 200 and an array of all topics with slug and description properties", () => {
         return request(app)
             .get('/api/topics')
@@ -22,11 +22,11 @@ describe("/api/topics", () => {
                 const firstObjInTopics = { slug: 'mitch', description: 'The man, the Mitch, the legend' }
                 expect(body.topics.length).toBe(3)
                 expect(body.topics[0]).toMatchObject(firstObjInTopics)
-            })
-    })
-})
+            });
+    });
+});
 
-describe('/api', () => {
+describe('GET /api', () => {
     test('GET /api should return a description of all endpoints', () => {
         return request(app)
             .get('/api')
@@ -53,9 +53,8 @@ describe('/api/articles/:article_id', () => {
                     votes: expect.any(Number),
                     article_img_url: expect.any(String),
                     body: expect.any(String)
-                })
-            })
-            ;
+                });
+            });
     });
 });
 
@@ -112,8 +111,8 @@ describe('/api/articles/:article_id/comments', () => {
                     comment_count: expect.any(String)
                 });
             });
-    });  
-    test('Checks request to an article_id with no comments should return an empty array', () => {
+    });
+    test('Checks request to an article_id with no comments returns an empty array', () => {
         const article_id = 2
         return request(app)
             .get(`/api/articles/${article_id}/comments`)
@@ -160,6 +159,50 @@ describe('/api/articles/:article_id/comments', () => {
                 expect(body.msg.article_id).toBe(article_id)
                 expect(body.msg.body).toBe(newComment1.body)
                 expect(body.msg.author).toBe(newComment1.username)
+            });
+    });
+});
+
+describe('updating /api/articles/:article_id', () => {
+    test('positive inc_votes should increment the votes of an article by the inc_votes amount', () => {
+        const article_id = 1;
+        const newVotes = { inc_votes: 1 };
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(newVotes)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.msg.votes).toBe(data.articleData[0].votes + 1);
+            });
+    });
+    test('negative inc_votes should decrement the votes of an article by the inc_votes amount', () => {
+        const article_id = 1
+        const newVotes = { inc_votes: -1 }
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(newVotes)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.msg.votes).toBe(data.articleData[0].votes - 1)
+            })
+    })
+    test('checks the patch request returns the updated article when the user updates the votes', () => {
+        const article_id = 1;
+        const newVotes = { inc_votes: 1 };
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(newVotes)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.msg).toMatchObject({
+                    article_id: expect.any(Number),
+                    title: expect.any(String),
+                    author: expect.any(String),
+                    topic: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String),
+                });
             });
     });
 });
