@@ -82,4 +82,23 @@ function insertComment(article_id, username, body) {
         })
 }
 
-module.exports = { fetchTopics, fetchArticlesById, fetchAllArticles, fetchArticlesComments, insertComment }
+function changeArticleVotes(article_id, inc_votes) {
+    return db.query(`
+        UPDATE articles
+        SET votes = votes + $2
+        WHERE article_id = $1
+        RETURNING *
+`, [article_id, inc_votes])
+        .then((result) => {
+            return result.rows[0]
+        })
+}
+
+module.exports = { 
+    fetchTopics, 
+    fetchArticlesById, 
+    fetchAllArticles, 
+    fetchArticlesComments, 
+    insertComment, 
+    changeArticleVotes 
+}

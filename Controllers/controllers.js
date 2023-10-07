@@ -3,7 +3,8 @@ const {
     fetchArticlesById,
     fetchAllArticles,
     fetchArticlesComments,
-    insertComment
+    insertComment,
+    changeArticleVotes
 } = require("../Models/models")
 const endpoints = require('../endpoints.json');
 
@@ -79,11 +80,24 @@ function postComment(req, res, next) {
         });
 }
 
+function updateArticleVotes(req, res, next) {
+    const article_id = req.params.article_id
+    const inc_votes = req.body.inc_votes
+    return changeArticleVotes(article_id, inc_votes)
+    .then((result) => {
+        res.status(200).send({msg: result})
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
 module.exports = {
     getTopics,
     getEndpoints,
     getArticlesById,
     getAllArticles,
     getArticlesComments,
-    postComment
+    postComment,
+    updateArticleVotes
 }

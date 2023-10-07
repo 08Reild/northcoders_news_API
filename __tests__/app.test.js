@@ -162,3 +162,47 @@ describe('/api/articles/:article_id/comments', () => {
             });
     });
 });
+
+describe('updating /api/articles/:article_id', () => {
+    test('positive inc_votes should increment the votes of an article by the inc_votes amount', () => {
+        const article_id = 1;
+        const newVotes = { inc_votes: 1 };
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(newVotes)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.msg.votes).toBe(data.articleData[0].votes + 1);
+            });
+    });
+    test('negative inc_votes should decrement the votes of an article by the inc_votes amount', () => {
+        const article_id = 1
+        const newVotes = { inc_votes: -1 }
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(newVotes)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.msg.votes).toBe(data.articleData[0].votes - 1)
+            })
+    })
+    test('checks the patch request returns the updated article when the user updates the votes', () => {
+        const article_id = 1;
+        const newVotes = { inc_votes: 1 };
+        return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(newVotes)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.msg).toMatchObject({
+                    article_id: expect.any(Number),
+                    title: expect.any(String),
+                    author: expect.any(String),
+                    topic: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String),
+                });
+            });
+    });
+});
