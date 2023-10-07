@@ -13,7 +13,7 @@ beforeEach(() => {
 
 afterAll(() => { db.end() })
 
-describe("/api/topics", () => {
+describe("GET /api/topics", () => {
     test("Checks the request returns status 200 and an array of all topics with slug and description properties", () => {
         return request(app)
             .get('/api/topics')
@@ -22,11 +22,11 @@ describe("/api/topics", () => {
                 const firstObjInTopics = { slug: 'mitch', description: 'The man, the Mitch, the legend' }
                 expect(body.topics.length).toBe(3)
                 expect(body.topics[0]).toMatchObject(firstObjInTopics)
-            })
-    })
-})
+            });
+    });
+});
 
-describe('/api', () => {
+describe('GET /api', () => {
     test('GET /api should return a description of all endpoints', () => {
         return request(app)
             .get('/api')
@@ -53,9 +53,8 @@ describe('/api/articles/:article_id', () => {
                     votes: expect.any(Number),
                     article_img_url: expect.any(String),
                     body: expect.any(String)
-                })
-            })
-            ;
+                });
+            });
     });
 });
 
@@ -112,8 +111,8 @@ describe('/api/articles/:article_id/comments', () => {
                     comment_count: expect.any(String)
                 });
             });
-    });  
-    test('Checks request to an article_id with no comments should return an empty array', () => {
+    });
+    test('Checks request to an article_id with no comments returns an empty array', () => {
         const article_id = 2
         return request(app)
             .get(`/api/articles/${article_id}/comments`)

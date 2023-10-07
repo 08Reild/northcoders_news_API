@@ -1,7 +1,7 @@
-const { 
-    fetchTopics, 
-    fetchArticlesById, 
-    fetchAllArticles, 
+const {
+    fetchTopics,
+    fetchArticlesById,
+    fetchAllArticles,
     fetchArticlesComments,
     insertComment
 } = require("../Models/models")
@@ -55,27 +55,35 @@ function getArticlesComments(req, res, next) {
         })
 }
 
-function postComment (req, res, next) {
-    const username = req.body.username
-    const body = req.body.body
-    const article_id = req.params.article_id
-    if (!username || !body) {
-        return res.status(400).send({ msg: "Bad Request" });
-    }
-    return insertComment(article_id, username, body)
-    .then((result) => {
-        res.status(201).send({msg: result})
-    })
-    .catch((err) => {
-        next(err)
-    })
+function postComment(req, res, next) {
+    const username = req.body.username;
+    const body = req.body.body;
+    const article_id = req.params.article_id;
+    fetchArticlesById(article_id)
+        .then((result) => {
+            if (!username || !body) {
+                return res.status(400).send({ msg: "Bad Request" });
+            } else {
+                return insertComment(article_id, username, body)
+                    .then((result) => {
+                        res.status(201).send({ msg: result });
+                    })
+            }
+        })
+        .catch((err) => {
+            if (err.status === 404) {
+                return res.status(404).send({ msg: "Not Found" });
+            } else {
+                next(err);
+            }
+        });
 }
 
-module.exports = { 
-    getTopics, 
-    getEndpoints, 
-    getArticlesById, 
-    getAllArticles, 
-    getArticlesComments, 
+module.exports = {
+    getTopics,
+    getEndpoints,
+    getArticlesById,
+    getAllArticles,
+    getArticlesComments,
     postComment
 }
