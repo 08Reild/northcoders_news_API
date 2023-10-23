@@ -206,3 +206,22 @@ describe('updating /api/articles/:article_id', () => {
             });
     });
 });
+
+describe('DELETE /api/comments/:comment_id', () => {
+    test('successful deletion of a comment by comment id returns status 204', () => {
+        const comment_id = 1;
+        return request(app)
+            .delete(`/api/comments/${comment_id}`)
+            .expect(204);
+    });
+    test('Deletes a comment by comment_id and checks it no longer exists', () => {
+        const comment_id = 2;
+        return request(app)
+            .delete(`/api/comments/${comment_id}`)
+            .then(() => {
+                return request(app)
+                    .get(`/api/comments/${comment_id}`)
+                    .expect(404);
+            });
+    });
+});

@@ -129,4 +129,21 @@ describe("invalid updates (POST/PATCH)", () => {
     })
 })
 
+describe("Invalid delete requests", () => {
+    test('Tries to delete a non-existent comment and returns 404', () => {
+        const comment_id = 132608;
+        return request(app)
+            .delete(`/api/comments/${comment_id}`)
+            .expect(404);
+    });
+    test('Deleting a comment with a non-numeric comment_id returns 400 Bad Request', () => {
+        const comment_id = 'invalid_comment_id';
+        return request(app)
+            .delete(`/api/comments/${comment_id}`)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe('Bad Request');
+            });
+    });
+})
 

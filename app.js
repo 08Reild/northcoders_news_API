@@ -7,7 +7,8 @@ const {
     getAllArticles, 
     getArticlesComments,
     postComment,
-    updateArticleVotes
+    updateArticleVotes,
+    deleteComment
 } = require('./Controllers/controllers')
 const { 
     handleCustomErrors, 
@@ -27,11 +28,13 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticlesById);
 
-app.get("/api/articles/:article_id/comments", getArticlesComments)
+app.get("/api/articles/:article_id/comments", getArticlesComments);
 
-app.post("/api/articles/:article_id/comments", postComment)
+app.post("/api/articles/:article_id/comments", postComment);
 
-app.patch("/api/articles/:article_id", updateArticleVotes)
+app.patch("/api/articles/:article_id", updateArticleVotes);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.all('/api/*', (req, res) => {
     return res.status(404).send({ msg: "Not Found" })

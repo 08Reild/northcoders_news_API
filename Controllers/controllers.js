@@ -4,7 +4,8 @@ const {
     fetchAllArticles,
     fetchArticlesComments,
     insertComment,
-    changeArticleVotes
+    changeArticleVotes,
+    deleteCommentById
 } = require("../Models/models")
 const endpoints = require('../endpoints.json');
 
@@ -91,6 +92,17 @@ function updateArticleVotes(req, res, next) {
     })
 }
 
+function deleteComment(req, res, next) {
+    const comment_id = req.params.comment_id;
+    deleteCommentById(comment_id).then((result) => {
+            res.sendStatus(204)
+        })
+        .catch((err) => {
+            next(err);
+        });
+}
+
+
 module.exports = {
     getTopics,
     getEndpoints,
@@ -98,5 +110,6 @@ module.exports = {
     getAllArticles,
     getArticlesComments,
     postComment,
-    updateArticleVotes
+    updateArticleVotes,
+    deleteComment
 }
