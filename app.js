@@ -44,4 +44,5 @@ app.use(handleCustomErrors);
 app.use(handlePSQLErrors);
 app.use(handle500Errors);
 
-module.exports = { app }
+module.exports = {app}
+
